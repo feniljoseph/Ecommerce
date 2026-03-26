@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ProductCard from "../components/cards/ProductCard";
 import styled from "styled-components";
-import { category, filter } from "../utils/data";
+import { filter } from "../utils/data";
 import { CircularProgress, Slider } from "@mui/material";
 import { getAllProducts } from "../api";
 
@@ -102,10 +102,9 @@ const ShopListing = () => {
     "Bags",
   ]); // Default selected categories
 
-  const getFilteredProductsData = async () => {
+  const getFilteredProductsData = useCallback(async () => {
     setLoading(true);
-    // Call the API function for filtered products
-    await getAllProducts(
+    const res = await getAllProducts(
       `minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}${
         selectedSizes.length > 0 ? `&sizes=${selectedSizes.join(",")}` : ""
       }${
@@ -113,15 +112,14 @@ const ShopListing = () => {
           ? `&categories=${selectedCategories.join(",")}`
           : ""
       }`
-    ).then((res) => {
-      setProducts(res.data);
-      setLoading(false);
-    });
-  };
+    );
+    setProducts(res.data);
+    setLoading(false);
+  }, [priceRange, selectedCategories, selectedSizes]);
 
   useEffect(() => {
     getFilteredProductsData();
-  }, [priceRange, selectedSizes, selectedCategories]);
+  }, [getFilteredProductsData]);
   return (
     <Container>
       {loading ? (

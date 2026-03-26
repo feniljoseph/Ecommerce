@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import HeaderImage from "../utils/Images/Header.png";
 import { category } from "../utils/data";
@@ -53,20 +53,16 @@ const CardWrapper = styled.div`
 `;
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
-  const getProducts = async () => {
-    setLoading(true);
-    await getAllProducts().then((res) => {
-      setProducts(res.data);
-      setLoading(false);
-    });
-  };
+  const getProducts = useCallback(async () => {
+    const res = await getAllProducts();
+    setProducts(res.data);
+  }, []);
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
   return (
     <Container>
       <Section

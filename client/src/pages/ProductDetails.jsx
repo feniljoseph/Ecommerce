@@ -1,5 +1,5 @@
 import { CircularProgress, Rating } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
 import { FavoriteBorder, FavoriteRounded } from "@mui/icons-material";
@@ -135,13 +135,15 @@ const ProductDetails = () => {
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
 
-  const getProduct = async () => {
+  const getProduct = useCallback(async () => {
     setLoading(true);
-    await getProductDetails(id).then((res) => {
+    try {
+      const res = await getProductDetails(id);
       setProduct(res.data);
+    } finally {
       setLoading(false);
-    });
-  };
+    }
+  }, [id]);
 
   const addFavorite = async () => {
     setFavoriteLoading(true);
@@ -226,32 +228,35 @@ const ProductDetails = () => {
         );
       });
   };
-  const checkFavourite = async () => {
+  const checkFavourite = useCallback(async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await getFavourite(token, { productId: product?._id })
-      .then((res) => {
-        const isFavorite = res.data?.some(
-          (favorite) => favorite._id === product?._id
-        );
-        setFavorite(isFavorite);
-        setFavoriteLoading(false);
-      })
-      .catch((err) => {
-        setFavoriteLoading(false);
-        dispatch(
-          openSnackbar({
-            message: err.message,
-            severity: "error",
-          })
-        );
-      });
-  };
+    try {
+      const res = await getFavourite(token, { productId: product?._id });
+      const isFavorite = res.data?.some(
+        (fav) => fav._id === product?._id
+      );
+      setFavorite(isFavorite);
+    } catch (err) {
+      dispatch(
+        openSnackbar({
+          message: err.message,
+          severity: "error",
+        })
+      );
+    } finally {
+      setFavoriteLoading(false);
+    }
+  }, [dispatch, product?._id]);
 
   useEffect(() => {
     getProduct();
+  }, [getProduct]);
+
+  useEffect(() => {
+    if (!product?._id) return;
     checkFavourite();
-  }, []);
+  }, [checkFavourite, product?._id]);
 
   return (
     <Container>
