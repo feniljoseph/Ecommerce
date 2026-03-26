@@ -401,7 +401,7 @@ export const UserSignIn = async (data) => {
   }
 };
 
-export default {
+const api = {
   getAllProducts,
   getProductById,
   getProductDetails,
@@ -415,3 +415,5 @@ export default {
   UserSignUp,
   UserSignIn,
 };
+
+export default api;

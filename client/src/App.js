@@ -9,7 +9,7 @@ import ShopListing from "./pages/ShopListing";
 import Favourite from "./pages/Favourite";
 import Cart from "./pages/Cart";
 import ProductDetails from "./pages/ProductDetails";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ToastMessage from "./components/ToastMessage";
 
 const Container = styled.div`
