@@ -3,7 +3,6 @@ import styled from "styled-components";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
 import { addToCart, deleteFromCart, getCart, placeOrder } from "../api";
-import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/reducers/snackbarSlice";
@@ -132,7 +131,6 @@ const Delivery = styled.div`
 `;
 
 const Cart = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);

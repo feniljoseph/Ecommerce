@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import ProductCard from "../components/cards/ProductCard";
 import { getFavourite } from "../api";
@@ -47,21 +47,19 @@ const CardWrapper = styled.div`
 const Favourite = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
-  const [reload, setReload] = useState(false);
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     setLoading(true);
     const token = localStorage.getItem("krist-app-token");
     await getFavourite(token).then((res) => {
       setProducts(res.data);
       setLoading(false);
-      setReload(!reload);
     });
-  };
+  }, []);
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
   return (
     <Container>
       <Section>
