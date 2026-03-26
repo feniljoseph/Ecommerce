@@ -13,6 +13,19 @@ app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+  cors({
+    origin: [
+      "https://ecommerce-six-kappa-81.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+app.options("*", cors());
+
 // routes
 app.get("/", (req, res) => {
   res.status(200).json({
