@@ -69,7 +69,7 @@ const mockProducts = [
 ];
 
 // API base URL - can be configured for backend
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://ecommerce-backend-psi-five.vercel.app/api";
 const STORAGE_KEYS = {
   CART: "krist-app-cart",
   FAVOURITE: "krist-app-favourite",
